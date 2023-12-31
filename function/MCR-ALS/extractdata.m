@@ -11,15 +11,31 @@ nslice=evalin('base','importMSv.load.noFiles;');
 for i=1:nslice
     %eval(['data.imp',num2str(i),'=importMSv.ROIplotGUI.img_',num2str(i),'.MSroi;']);
     data=evalin('base',['importMSv.mcr_als.alsOptions.resultats.img_',num2str(i),'.copt;']);
+    phox=evalin('base',['importMSv.ROIplotGUI.img_',num2str(i),'.x_cut;']);
+    phoy=evalin('base',['importMSv.ROIplotGUI.img_',num2str(i),'.y_cut;']);
+    
+    runpartialareaROI=evalin('base','importMSv.summary.runpartialareaROI;');
+    if runpartialareaROI==2
+        MSicut=evalin('base',['importMSv.Partialarea.img_',num2str(i),'.MSicut;']);
+        if MSicut==2
+            mask=evalin('base',['importMSv.Partialarea.img_',num2str(i),'.mask;']);
+            mascaran=reshape(double(mask),[],1);
+            loc=find(mascaran~=0);
+            [~,n]=size(data);
+            m=phox*phoy;
+            ctot=zeros(m,n);
+            ctot(loc,:)=data;
+            data=ctot;
+        end
+    end
+    
     imp{i,1}=data;
-    [sda(i,1),~]=size(data);
+    sda(i,1)=phox;
+    sda(i,2)=phoy;
 end
 % 找到最大矩阵形状,并获取对应形状
-xsize=max(sda(:,1));
-number=find(sda(:,1)==xsize);
-number=number(1,1);
-photox=evalin('base',['importMSv.ROIplotGUI.img_',num2str(number),'.x_cut;']);
-photoy=evalin('base',['importMSv.ROIplotGUI.img_',num2str(number),'.y_cut;']);
+photox=max(sda(:,1));
+photoy=max(sda(:,2));
 
 % 串联成三维矩阵
 photo= zeros(photox,photoy,nslice);
@@ -39,7 +55,7 @@ for k = 1:nslice
     [m,~]=size(datacache);
     yc=(photoy-sizey);
     if yc>0
-        datacache=[datacache;zeros(m,yc)];
+        datacache=[datacache,zeros(m,yc)];
     end
     
     photo(:,:,k)=datacache;

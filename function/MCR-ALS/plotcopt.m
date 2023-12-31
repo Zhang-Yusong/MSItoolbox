@@ -1,4 +1,5 @@
-function plotcopt(n)
+function plotcopt
+SVDnumber=evalin('base','mcr_als.alsOptions.nComponents;');
 % type of plot
 typePlot=evalin('base','mcr_als.aux.typePlot_image;');
 % flip y-axis
@@ -8,6 +9,7 @@ nn=evalin('base','mcr_als.alsOptions.nComponents;');
 %
 range_mode=evalin('base','mcr_als.cache.range_mode;');
 strength=evalin('base','mcr_als.cache.strength;');
+colorll=evalin('base','importMSv.summary.color;');
 
 aa=sqrt (nn);
 bb=aa-fix(aa);
@@ -21,44 +23,28 @@ end
 
 figure('Name','Conc distribution')
 suptitle('Concentration distribution');
-if typePlot==1
-    if valorFLIP==1
-        for i=1:n
-            subplot(jj,kk,i),
-            original_data=mdis{1,i};
-            data=set_range(original_data,range_mode,strength);
-            imagesc(data);
-            axis ('xy','tight','image','off');
-            colormap(flipud(hot));
+for i=1:SVDnumber
+    subplot(jj,kk,i),
+    original_data=mdis{1,i};
+    %original_data=rot90(mdis{1,i});
+    
+    
+    
+    data=set_range(original_data,range_mode,strength);
+    
+    if typePlot==1
+        imagesc(data);
+        if valorFLIP==1
+            axis ('xy','tight','image','off');colormap(colorll);colorbar;
+        else
+            axis ('tight','image','off');colormap(colorll);colorbar;
         end
-    else
-        for i=1:n
-            subplot(jj,kk,i),
-            original_data=mdis{1,i};
-            data=set_range(original_data,range_mode,strength);
-            imagesc(data);
-            axis ('tight','image','off');
-            colormap(flipud(hot));
-        end
-    end
-elseif typePlot==2
-    if valorFLIP==1
-        for i=1:n
-            subplot(jj,kk,i),
-            original_data=mdis{1,i};
-            data=set_range(original_data,range_mode,strength);
-            contour(data,50);
-            axis ('xy','tight','image','off');
-            colormap(flipud(hot));
-        end
-    else
-        for i=1:n
-            subplot(jj,kk,i),
-            original_data=mdis{1,i};
-            data=set_range(original_data,range_mode,strength);
-            contour(data,50);
-            axis ('tight','image','off');
-            colormap(flipud(hot));
+    elseif typePlot==2
+        contour(data,50);
+        if valorFLIP==1
+            axis ('xy','tight','image','off');colormap(colorll);colorbar;
+        else
+            axis ('tight','image','off');colormap(colorll);colorbar;
         end
     end
 end

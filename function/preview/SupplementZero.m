@@ -1,9 +1,9 @@
 function [xx,yy]=SupplementZero(x,y)
 xx=[];
 yy=[];
+x=reshape(x,1,[]);y=reshape(y,1,[]);
 % 设置步长
-accuracy=0.001;
-
+accuracy=0.1;
 a=-log10(accuracy);
 %
 for jjjj=(2:length(x))

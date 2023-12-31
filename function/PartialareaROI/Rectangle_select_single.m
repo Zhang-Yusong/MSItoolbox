@@ -1,9 +1,10 @@
 %MATLAB手动选取roi区域
-function [out_roi,row,col,high,width] = Rectangle_select_single(a,Indexes)
-figure;imagesc(a);
-axis tight image off;
-colormap(flipud(hot));
-colorbar
+function [out_roi,row,col,high,width] = Rectangle_select_single(a1,Indexes)
+colorll=evalin('base','importMSv.summary.color;');
+
+a1=set_range(a1,4,0.95);
+figure;imagesc(a1);
+axis tight image;colormap(colorll);colorbar
 b=imrect;
 h=getPosition(b); %在图片上画roi区域  
 

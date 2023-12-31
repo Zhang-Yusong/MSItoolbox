@@ -46,8 +46,9 @@ for j = 1:cols
         
         %判断该矩阵是否为空
         if ~isempty(A)
-            % 将所有 m/z 值为零的像素点设置为空
             if any(A(:,1))
+                % 将所有 intensity 值为0的m/z设置为空
+                A(A(:,2)==0,:)=[];
                 % 更新m/z的最大值和最小值
                 mzmin(si) = min(A(:,1));
                 mzmax(si) = max(A(:,1));
@@ -81,9 +82,12 @@ for j = 1:cols
 end
 
 % output
+mzmin(mzmin==0)=[];
+medianI(medianI==0)=[];
+
 mzMax = ceil (max(mzmax)); % ceil 向上取整
-mzMin = floor(min(mzmin(mzmin>0))); % floor 向下取整 
-medianImg=median(medianI(medianI>0));
+mzMin = floor(min(mzmin)); % floor 向下取整 
+medianImg=median(medianI);
 maximImg = max(maximI);
 % 关闭进度条，并输出end
 waitbar(1,h,'Finished');

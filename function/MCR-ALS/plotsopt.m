@@ -1,4 +1,5 @@
-function plotsopt(sopt_xxx)
+function plotsopt
+sopt_xxx=evalin('base','mcr_als.alsOptions.resultats.optim_specs;');
 SVDnumber=evalin('base','mcr_als.alsOptions.nComponents;');
 mzroi=evalin('base','importMSv.ROIplotGUI.current_mzroi');
 aa=sqrt (SVDnumber);
@@ -38,7 +39,7 @@ figure('Name','Spectra')
 for i=1:SVDnumber
     subplot(row,col,i),
     [mz,y]=SupplementZero(mzroi,sopt_xxx(i,:));
-    plot(mz,y,'LineWidth',2);
+    plot(mz,y);
     axis([minmz maxmz minim1 maxim1]);
     % 设置刻度
     if i-(row-1)*col<=0

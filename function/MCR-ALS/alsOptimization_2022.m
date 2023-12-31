@@ -1,14 +1,3 @@
-% alsOptimization
-% Perfoms the ALS optimization using the constraints defined in the GUI
-% steps
-
-%**************************************************************************
-% MCR ALS OPTIMIZATION,
-%**************************************************************************
-
-% A) DATA PREPARATION AND INPUT
-% INITIALIZATIONS
-
 matdad=evalin('base','importMSv.ROIplotGUI.current_MSroi');
 nsign=evalin('base','min(size(mcr_als.alsOptions.iniesta))');
 iniesta=evalin('base','mcr_als.alsOptions.iniesta');
@@ -112,6 +101,7 @@ ishape=0;
 
 % dn is the experimental matrix and d is the PCA reproduced matrix
 d=evalin('base','importMSv.ROIplotGUI.current_MSroi');
+d=full(d);
 dn=d;
 [u,s,v,d,sd]=pcarep(dn,nsign);
 

@@ -1,7 +1,7 @@
 function A=norfun
-A.fun1 = @origin;  % 原图
-A.fun2 = @norEuc;  % 欧氏距离
-A.fun3 = @norTIC;  % TIC
+A.fun1 = @norTIC;  % TIC
+A.fun2 = @origin;  % 不处理
+A.fun3 = @norEuc;  % 欧氏距离
 A.fun4 = @norVec;  % vecnorm
 A.fun5 = @zscstd;  % zscore_std
 A.fun6 = @norm2;   % norm_2
@@ -16,26 +16,27 @@ A.fun13 = @scamad; % scale_mad
 A.fun14 = @scafir; % scale_first
 end
 
+
 % 1
+function [nordata,nortitle]=norTIC(data)
+[n,~]=size(data);
+TIC=sum(data(:))/(n);
+nordata=data./TIC;
+nordata = max(nordata,0);% 将归一化后的数据中小于零的值设为零
+nortitle='TIC';
+end
+% 2
 function [nordata,nortitle]=origin(data)
 nordata=data;
 nordata= max(nordata,0);
 nortitle='未normalization';
 end
-% 2
+% 3
 function [nordata,nortitle]=norEuc(data)
 sr=sqrt(sum((data.^2),2));
 sn=data./sr;
 nordata= max(sn,0);
 nortitle='欧氏距离';
-end
-% 3
-function [nordata,nortitle]=norTIC(data)
-TIC=sum(data,2);
-TIC=sum(TIC);
-nordata=data./TIC;
-nordata = max(nordata,0);
-nortitle='TIC';
 end
 % 4
 function [nordata,nortitle]=norVec(data)

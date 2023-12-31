@@ -4,17 +4,32 @@ currentFile=xxxx;
 x_pixs=evalin('base',['importMSv.ROIplotGUI.img_',num2str(currentFile),'.x_cut;']);
 y_pixs=evalin('base',['importMSv.ROIplotGUI.img_',num2str(currentFile),'.y_cut;']);
 
-Pix=x_pixs * y_pixs;
-PixIn=(1:Pix);
+runpartialareaROI=evalin('base',['importMSv.summary.img_',num2str(currentFile),'.runpartialareaROI;']);
+if runpartialareaROI==2
+    MSicut=evalin('base',['importMSv.Partialarea.img_',num2str(currentFile),'.MSicut;']);
+    if MSicut==2
+        mask=evalin('base',['importMSv.Partialarea.img_',num2str(currentFile),'.mask;']);
+        mascaran=reshape(double(mask),[],1);
+        PixIn=find(mascaran~=0);
+    else
+        Pix=x_pixs * y_pixs;
+        PixIn=(1:Pix);
+    end
+else
+    Pix=x_pixs * y_pixs;
+    PixIn=(1:Pix);
+end
 
 assignin('base','x_pixs',x_pixs);
-assignin('base','y_pixs',y_pixs);
-assignin('base','PixIn',PixIn);
-
 evalin('base','mcr_als.aux.x=x_pixs;');
+
+assignin('base','y_pixs',y_pixs);
 evalin('base','mcr_als.aux.y=y_pixs;');
-evalin('base','mcr_als.aux.z=1;');
+
+assignin('base','PixIn',PixIn);
 evalin('base','mcr_als.aux.pixin=PixIn;');
+
+evalin('base','mcr_als.aux.z=1;');
 evalin('base','mcr_als.aux.pixout=0;');
 
 evalin('base','clear y_pixs x_pixs PixIn');
@@ -30,8 +45,6 @@ evalin('base','clear longWave');
 %OK
 copt=evalin('base',['mcr_als.alsOptions.resultats.img_',num2str(currentFile),'.copt;']);
 sopt=evalin('base','mcr_als.alsOptions.resultats.optim_specs;');
-[m,n]=size(copt);
-
 % x
 x=evalin('base','mcr_als.aux.x;');
 % y
@@ -48,6 +61,8 @@ pixout=evalin('base','mcr_als.aux.pixout;');
 %     pixout=0;
 %     pixin=[1:m];
 % end
+[~,n]=size(copt);
+m=x*y;
 
 mdis=cell(z,n);
 quantc=zeros(z,n);

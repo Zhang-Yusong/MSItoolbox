@@ -3,27 +3,13 @@ sumM=sum(Data,2);
 [m,~]=size(sumM);
 index=(1:m)';
 
-mascaraii=reshape(sumM,ypixn,xpixn);
+mascara=reshape(sumM,ypixn,xpixn);
 indexesii=reshape(index,ypixn,xpixn);
-
-mascarai=[];
-indexesi=[];
-for ii=1:ypixn
-    if mascaraii(ii,:)==0
-        continue
-    else
-        mascarai=[mascarai;mascaraii(ii,:)];
-        indexesi=[indexesi;indexesii(ii,:)];
-    end
-end
-mascara=[];
-indexes=[];
-for jj=1:xpixn
-    if mascarai(:,jj)==0
-        continue
-    else
-        mascara=[mascara,mascarai(:,jj)];
-        indexes=[indexes,indexesi(:,jj)];
-    end
-end
+indexes=indexesii;
+zerocol=find(sum(mascara,1)==0);
+zerorow=find(sum(mascara,2)==0);
+mascara(:,zerocol)=[];
+mascara(zerorow,:)=[];
+indexes(:,zerocol)=[];
+indexes(zerorow,:)=[];
 [mm,nn]=size(indexes);
